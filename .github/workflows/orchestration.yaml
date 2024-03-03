@@ -14,15 +14,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: code_format_check
-          pull: default
-          image: poetry-image:latest
-          commands:
-            - pip install yapf
-            - pip install toml
-            - yapf -dr .
-          when:
-            event:
-              - push
+          run: |
+            pip install yapf
+            pip install toml
+            yapf -dr .
 
 
       - name: Install Dependencies
