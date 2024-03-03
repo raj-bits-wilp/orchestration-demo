@@ -9,7 +9,6 @@ session = boto3.Session(profile_name=profile_name)
 # Create an S3 client using the session
 s3 = session.client('s3')
 
-
 # List objects in the specified bucket
 response = s3.list_objects(Bucket='orchestration-demo')
 

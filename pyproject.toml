@@ -36,6 +36,7 @@ ipywidgets = "^8.1.1"
 nbstripout = "^0.6.1"
 openai = "^1.8.0"
 luqum = "^0.13.0"
+yapf = "^0.40.2"
 
 [tool.poetry.dev-dependencies]
 pytest = "4.3.1"
