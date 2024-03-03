@@ -21,6 +21,7 @@ jobs:
 
 
       - name: Install Dependencies
+        uses: poetry-image
         run: |
             poetry shell
             poetry install
