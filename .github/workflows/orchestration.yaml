@@ -14,10 +14,10 @@ jobs:
         uses: actions/checkout@v2
 
       - name: code_format_check
-          run: |
-            pip install yapf
-            pip install toml
-            yapf -dr .
+        run: |
+          pip install yapf
+          pip install toml
+          yapf -dr .
 
 
       - name: Install Dependencies
