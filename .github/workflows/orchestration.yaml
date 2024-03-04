@@ -24,8 +24,9 @@ jobs:
 
       - name: Install Dependencies
         run: |
-            poetry shell
-            poetry install
+          python -m pip install --upgrade pip
+          pip install poetry
+          poetry install --no-root --no-dev --no-ansi
 
       - name: Build
         run: poetry build
