@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spam-classifier-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: poetry
+  template:
+    metadata:
+      labels:
+        app: poetry
+    spec:
+      containers:
+        - name: spam-classifier-image
+          image: 637423246794.dkr.ecr.us-west-2.amazonaws.com/spam-classifier-image:latest
+          ports:
+            - containerPort: 80
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 100m
+              memory: 256Mi

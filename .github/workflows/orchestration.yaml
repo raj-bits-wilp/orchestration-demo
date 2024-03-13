@@ -27,5 +27,5 @@ jobs:
           poetry self update
           poetry install --no-root --no-dev --no-ansi
 
-      - name: Build
-        run: poetry build
+      - name: Build Docker image
+        run: docker build -t pipeline-orchestration-demo ./Model_Dockers/streamlit-spam-detector

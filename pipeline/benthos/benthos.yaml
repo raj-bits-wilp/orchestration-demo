@@ -1,0 +1,58 @@
+---
+http:
+  address: 0.0.0.0:${PORT:4196}
+  root_path: /
+  debug_endpoints: ${ENABLE_DEBUG_ENDPOINTS:false}
+
+input:
+  label: benthos_dump_input_kafka_orchestration
+  kafka:
+    addresses:
+      - localhost:9092 # Kafka server is listening on this address
+    topics:
+      - pipeline-orchestration-demo # Topic in Kafka Cluster
+    client_id: orchestration_0
+    consumer_group: orchestration
+    group:
+      heartbeat_interval: ${HEARTBEAT_INTERVAL:3s}
+      rebalance_timeout: ${REBALANCE_TIMEOUT:90s}
+      session_timeout: ${SESSION_TIMEOUT:10s}
+    start_from_oldest: ${START_FROM_OLDEST:false}
+    max_processing_period: ${MAX_PROCESSING_PERIOD:60s}
+    checkpoint_limit: ${CHECKPOINT_LIMIT:20}
+    batching:
+      byte_size: ${BYTE_SIZE:20000000}
+      count: ${COUNT:10000}
+      period: ${PERIOD:10s}
+      processors:
+        - label: orchestration_mapping
+          mapping: |
+            root.text = this
+        - log:
+            level: INFO
+            message: "Message received from Kafka Topic"
+            fields_mapping: |
+              root.text = this.text
+        - label: spam_classifier_http
+          http:
+            drop_on: [ 500, 501, 400, 404, 403, 406, 422 ]
+            backoff_on: [ 408, 429, 502, 503, 504 ]
+            max_retry_backoff: "120s"
+            timeout: "60s"
+            url: http://0.0.0.0:8000/spam_classification
+            verb: POST
+            headers:
+              Content-Type: application/json
+              Content-Encoding: gzip
+
+
+#        - log:
+#            level: INFO
+#            message: "Message received from Kafka Topic"
+#            fields_mapping: |
+#              root = this
+
+
+metrics:
+  prometheus: { }
+
