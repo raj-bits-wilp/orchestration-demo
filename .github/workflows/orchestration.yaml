@@ -21,6 +21,13 @@ jobs:
           pip install toml
           yapf -dr .
 
+      - name: Install kubectl
+        run: |
+          sudo apt-get update && sudo apt-get install -y apt-transport-https gnupg
+          sudo curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
+          echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | sudo tee -a /etc/apt/sources.list.d/kubernetes.list
+          sudo apt-get update
+          sudo apt-get install -y kubectl
 
 
       - name: Configure AWS credentials and EKS credentials
@@ -37,14 +44,14 @@ jobs:
       - name: Login to AWS ECR
         run: aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com
 
-      - name: Build Docker image
-        run: |
-          docker build -t pipeline-orchestration-demo ./spam-classifier
-          docker tag pipeline-orchestration-demo:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/spam-classifier-image:1.0.0
-
-      - name: Push Docker image to ECR
-        run: |
-          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/spam-classifier-image:1.0.0
+#      - name: Build Docker image
+#        run: |
+#          docker build -t pipeline-orchestration-demo ./spam-classifier
+#          docker tag pipeline-orchestration-demo:latest ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/spam-classifier-image:1.0.0
+#
+#      - name: Push Docker image to ECR
+#        run: |
+#          docker push ${{ secrets.AWS_ACCOUNT_ID }}.dkr.ecr.${{ secrets.AWS_REGION }}.amazonaws.com/spam-classifier-image:1.0.0
 
       - name: Pull Docker image from ECR
         env:
