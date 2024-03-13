@@ -28,4 +28,4 @@ jobs:
           poetry install --no-root --no-dev --no-ansi
 
       - name: Build Docker image
-        run: docker build -t pipeline-orchestration-demo ./Model_Dockers/streamlit-spam-detector
+        run: docker build -t pipeline-orchestration-demo ./spam-classifier
