@@ -30,8 +30,6 @@ jobs:
           mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
           echo "${{ kubectl version --client }}"
 
-
-
       - name: Configure AWS credentials and EKS credentials
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
