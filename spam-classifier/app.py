@@ -9,29 +9,32 @@ from pydantic import BaseModel
 app = FastAPI()
 
 # Load the model
-spam_clf = joblib.load(open('./models/spam_detector_model.pkl','rb'))
+spam_clf = joblib.load(open('./models/spam_detector_model.pkl', 'rb'))
 
 # Load vectorizer
 vectorizer = joblib.load(open('./vectors/vectorizer.pickle', 'rb'))
 
+
 class Data(BaseModel):
     text: str
+
 
 @app.post('/spam_classification')
 def diabetes_predd(input_parameters: Data):
     input_data = input_parameters.dict()
     prediction = spam_clf.predict(vectorizer.transform([input_data["text"]]))
 
-    if(prediction[0] == 0):
+    if (prediction[0] == 0):
         info = 'Ham'
 
     else:
         info = 'Spam'
 
-    return {"out":info}
+    return {"out": info}
+
 
 if __name__ == '__main__':
-    uvicorn.run(app, host = '127.0.0.1', port=8000)
+    uvicorn.run(app, host='127.0.0.1', port=8000)
 
 #
 # ### MAIN FUNCTION ###
