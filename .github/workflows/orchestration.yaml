@@ -23,11 +23,13 @@ jobs:
 
       - name: Install kubectl
         run: |
-          apt-get update && apt-get install -y apt-transport-https gnupg
-          curl -s https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add -
-          echo "deb https://apt.kubernetes.io/ kubernetes-xenial main" | tee -a /etc/apt/sources.list.d/kubernetes.list
-          apt-get update
-          apt-get install -y kubectl
+          curl -O https://s3.us-west-2.amazonaws.com/amazon-eks/1.29.0/2024-01-04/bin/linux/amd64/kubectl
+          sha256sum -c kubectl.sha256
+          openssl sha1 -sha256 kubectl
+          chmod +x ./kubectl
+          mkdir -p $HOME/bin && cp ./kubectl $HOME/bin/kubectl && export PATH=$HOME/bin:$PATH
+          echo "${{ kubectl version --client }}"
+
 
 
       - name: Configure AWS credentials and EKS credentials
