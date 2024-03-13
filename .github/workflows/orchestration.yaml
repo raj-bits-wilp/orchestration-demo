@@ -22,11 +22,7 @@ jobs:
           yapf -dr .
 
 
-      - name: Install Dependencies
-        run: |
-          poetry self update
-          poetry install --no-root --no-dev --no-ansi
-
+      
       - name: Assume IAM Role
         run: |
           aws sts assume-role \
